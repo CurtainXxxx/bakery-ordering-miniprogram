@@ -1,0 +1,39 @@
+<!-- pages/cart/cart.wxml -->
+<view class="cart-container">
+  <view class="delivery-options">
+    <text>配送方式：</text>
+    <radio-group bindchange="onDeliveryTypeChange">
+      <label><radio value="pickup" checked="{{deliveryType === 'pickup'}}" /> 自取</label>
+      <label><radio value="delivery" checked="{{deliveryType === 'delivery'}}" /> 配送</label>
+    </radio-group>
+  </view>
+
+  <view wx:if="{{deliveryType === 'delivery'}}" class="address-select" bindtap="selectAddress">
+    <text>收货地址：{{selectedAddress ? (selectedAddress.province + selectedAddress.city + selectedAddress.district + selectedAddress.detail) : '请选择地址'}}</text>
+    <text class="arrow">></text>
+  </view>
+
+  <view class="cart-list">
+    <block wx:for="{{cartItems}}" wx:key="productId">
+      <view class="cart-item">
+        <view class="cart-emoji">{{item.emoji}}</view>
+        <view class="cart-info">
+          <text>{{item.name}}</text>
+          <text>¥{{item.price}}</text>
+        </view>
+        <view class="quantity-control">
+          <button size="mini" bindtap="changeQuantity" data-id="{{item.productId}}" data-op="minus">-</button>
+          <text>{{item.quantity}}</text>
+          <button size="mini" bindtap="changeQuantity" data-id="{{item.productId}}" data-op="plus">+</button>
+        </view>
+      </view>
+    </block>
+    <view wx:if="{{cartItems.length === 0}}" class="empty-cart">购物车空空如也～</view>
+  </view>
+
+  <view class="total-bar">
+    <text>总计：¥{{totalPrice}}</text>
+    <button type="primary" bindtap="goToOrder">去下单</button>
+  </view>
+</view>
+<custom-tab-bar />

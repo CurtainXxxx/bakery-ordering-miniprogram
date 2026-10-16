@@ -1,0 +1,15 @@
+<!-- pages/detail/detail.wxml -->
+<view class="detail-container">
+  <view class="detail-image">
+    <image wx:if="{{product.image}}" src="{{product.image}}" mode="widthFix"></image>
+    <view wx:else class="detail-emoji">{{product.emoji}}</view>
+  </view>
+  <view class="detail-info">
+    <text class="detail-name">{{product.name}}</text>
+    <text class="detail-price">¥{{product.price}}</text>
+    <text class="detail-desc">{{product.desc}}</text>
+  </view>
+  <view class="action-bar">
+    <button class="buy-btn" bindtap="addToCart">加入购物车</button>
+  </view>
+</view>

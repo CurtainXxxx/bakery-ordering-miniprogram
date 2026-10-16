@@ -1,0 +1,52 @@
+<!-- pages/orders/orders.wxml -->
+<view class="orders-container">
+  <block wx:for="{{orders}}" wx:key="_id">
+    <view class="order-card">
+      <view class="order-header">
+        <text class="order-no">{{item.orderNo}}</text>
+        <text class="order-status {{item.status === '已取消' ? 'cancelled' : ''}}">{{item.status}}</text>
+      </view>
+      <view class="order-info">
+        <text>配送：{{item.deliveryType === 'pickup' ? '自取' : '配送'}}</text>
+        <text>{{item.createTime}}</text>
+      </view>
+
+      <!-- 配送地址（仅配送模式且地址存在时显示） -->
+      <view wx:if="{{item.deliveryType === 'delivery' && item.address}}" class="order-address">
+        <view class="address-title">收货信息</view>
+        <view class="address-detail">
+          <text>联系人：{{item.address.name}}</text>
+          <text>电话：{{item.address.phone}}</text>
+          <text>地址：{{item.address.province}}{{item.address.city}}{{item.address.district}}{{item.address.detail}}</text>
+        </view>
+      </view>
+
+      <!-- 用户备注 -->
+      <view wx:if="{{item.remark}}" class="order-remark">
+        <text class="remark-label">备注：</text>
+        <text class="remark-content">{{item.remark}}</text>
+      </view>
+
+      <!-- 商品明细 -->
+      <view class="order-items">
+        <block wx:for="{{item.items}}" wx:key="productId">
+          <view class="order-item">
+            <text>{{item.name}} x {{item.quantity}}</text>
+            <text>¥{{item.price * item.quantity}}</text>
+          </view>
+        </block>
+      </view>
+
+      <!-- 底部合计和按钮 -->
+      <view class="order-footer">
+        <text class="total">合计：¥{{item.totalPrice}}</text>
+        <view class="order-buttons">
+          <button wx:if="{{item.status === '待支付' || item.status === '待处理'}}" size="mini" type="primary" bindtap="continuePay" data-order="{{item}}">继续支付</button>
+          <button wx:if="{{item.status === '待支付' || item.status === '待处理'}}" size="mini" type="warn" bindtap="cancelOrder" data-order="{{item}}">取消订单</button>
+        </view>
+      </view>
+    </view>
+  </block>
+  <view wx:if="{{orders.length === 0}}" class="empty">暂无订单</view>
+</view>
+<custom-tab-bar />
